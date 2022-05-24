@@ -8,4 +8,5 @@ Rust实践，记录下学习 Rust 这段时间的一些实战 Demo 及遇到的�
 ## 数据结构
 
 1. [简易栈](https://github.com/yangs1/ruster/tree/main/stack)
+2. [区块链](https://github.com/yangs1/ruster/tree/main/blockchain)
 
