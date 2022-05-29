@@ -27,3 +27,9 @@ pub fn hash_to_string(data : &[u8]) -> String
     
     hasher.result_str()
 }
+
+pub fn hash_to_u8(data: &[u8], out: &mut [u8]) {
+    let mut hasher = Sha3::sha3_256();
+    hasher.input(data);
+    hasher.result(out);
+}

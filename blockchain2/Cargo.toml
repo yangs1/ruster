@@ -13,3 +13,5 @@ chrono = "0.4" # 时间工具
 thiserror = "1" # error 工具
 tracing = "0.1" # 日志工具
 tracing-subscriber = "0.3.11" #日志工具
+bigint = "4.4.3"
+anyhow = "1.0.57"
