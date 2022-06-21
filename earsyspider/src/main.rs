@@ -2,17 +2,27 @@ use std::fmt;
 
 
 fn main() {
-    let response = reqwest::blocking::get("https://www.imdb.com/search/title/?groups=top_100&sort=user_rating,desc&count=100")
+    let response = reqwest::blocking::get("https://top.baidu.com/board?platform=pc&sa=pcindex_entry")
     .unwrap()
     .text()
     .unwrap();
     // let content = reqwest::blocking::get("http://httpbin.org/range/26")?.text()?;
-    
     let document = scraper::Html::parse_document(&response);
 
-    let title_selector = scraper::Selector::parse("h3.lister-item-header>a").unwrap();
+    let title_selector = scraper::Selector::parse("div.content-pos_1fT0H>div>div.c-single-text-ellipsis").unwrap();
 
     let titles = document.select(&title_selector).map(|x| x.inner_html());
 
     titles.zip(1..101).for_each(|(item, number)| println!("{}. {}", number, item));
 }
+
+// let response = reqwest::blocking::get("https://www.imdb.com/search/title/?groups=top_100&sort=user_rating,desc&count=100")
+// .unwrap()
+// .text()
+// .unwrap();
+
+// let document = scraper::Html::parse_document(&response);
+// let title_selector = scraper::Selector::parse("h3.lister-item-header>a").unwrap();
+// let titles = document.select(&title_selector).map(|x| x.inner_html());
+// titles.zip(1..101).for_each(|(item, number)| println!("{}. {}", number, item));
+
