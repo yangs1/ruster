@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug,Deserialize, Serialize)]
@@ -54,7 +56,41 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //================ end 结构体请求 ===================
 
 
-    
+    let mut posts_hash_map = HashMap::new();
 
+
+    posts_hash_map.insert("user_id", "1");
+    posts_hash_map.insert("title",  "shaoxia_test");
+    posts_hash_map.insert("body", "shaoxia_test body");
+
+
+    let create_posts_map_resp = client
+    .post("https://jsonplaceholder.typicode.com/posts")
+    .json(&posts_hash_map)
+    .send()
+    .await?
+    .text()
+    .await?;
+
+    println!("{:#?}", create_posts_map_resp);
+
+
+        //================ end hash_map 请求 ===================
+
+
+
+    let create_posts_serde_resp:Posts = client
+    .post("https://jsonplaceholder.typicode.com/posts")
+    .json(&serde_json::json!({
+        "user_id" : "2",
+        "title" : "xxxx",
+        "body" : "asda"
+    }))
+    .send()
+    .await?
+    .json()
+    .await?;
+
+    println!("{:#?}", create_posts_serde_resp);
     Ok(())
 }
