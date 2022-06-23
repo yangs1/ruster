@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug)]
+#[derive(Debug,Deserialize, Serialize)]
 struct Posts{
     #[serde(rename= "userId")]
     user_id : Option<usize>,
@@ -11,34 +11,50 @@ struct Posts{
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let response = reqwest::blocking::get("https://top.baidu.com/board?platform=pc&sa=pcindex_entry")
-    .unwrap().text().unwrap();
-
-
+    
+    
     let client = reqwest::Client::new();
 
-    let post_get_one = client
-    .get("https://jsonplaceholder.typicode.com/posts")
-    .send().await?.text().await?;
-
-
-    // let ip = reqwest::get("http://httpbin.org/ip")
-    //      .await?
-    //      .json::<Posts>()
-    //      .await?;
-         
-    let post_get_one = client
-    .get("https://jsonplaceholder.typicode.com/posts")
+    //解析单个
+    let posts_get_one = client
+    .get("https://jsonplaceholder.typicode.com/posts/1")
     .send().await?.json::<Posts>().await?;
 
-    // let content = reqwest::blocking::get("http://httpbin.org/range/26")?.text()?;
-    let document = scraper::Html::parse_document(&response);
+    println!("{:?}", posts_get_one);
 
-    let title_selector = scraper::Selector::parse("div.content-pos_1fT0H>div>div.c-single-text-ellipsis").unwrap();
 
-    let titles = document.select(&title_selector).map(|x| x.inner_html());
+    let posts_get_array = client
+    .get("https://jsonplaceholder.typicode.com/posts")
+    .send().await?.json::<Vec<Posts>>().await?;
 
-    titles.zip(1..101).for_each(|(item, number)| println!("{}. {}", number, item));
+    println!("{:#?}", posts_get_array);
+
+    
+
+    let create_posts = Posts{
+        user_id:None,
+        id : None,
+        title : "shaoxia_test".to_string(),
+        body : "shaoxia_test body".to_string()
+    };
+
+    let create_posts_resp = client
+    .post("https://jsonplaceholder.typicode.com/posts")
+    .json(&create_posts)
+    .send()
+    .await?
+    .json::<Posts>()
+    .await?;
+
+    println!("{:#?}", create_posts_resp);
+
+    
+
+
+    //================ end 结构体请求 ===================
+
+
+    
 
     Ok(())
 }
