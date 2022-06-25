@@ -5,16 +5,18 @@ use crossterm::{
     event::{poll, read, Event, KeyEvent, KeyCode},
     execute,queue,
     style::{Color, Print, ResetColor, SetForegroundColor},
-    terminal::{Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen, enable_raw_mode},
     Result,
 };
 use std::{io::{stdout, Write}, thread::sleep};
 use std::time::Duration;
 use std::{thread, time};
 
-fn  main () {
+fn  main () -> Result<()> {
 	let mut stdout = stdout();
 
+	// 开启输入模式
+	enable_raw_mode()?;
 
 	execute!(
         stdout,
@@ -23,6 +25,48 @@ fn  main () {
 		Hide
 
     ).unwrap();
+
+	let mut game = game::Universe::new(5, 5);
+    game.set_cells(&[(2, 1), (2, 2), (2, 3)]);
+
+	let mut color = 0;
+	loop {
+		queue!(stdout, Clear(ClearType::All))?;
+		let mut i = 0;
+		while let Some(line) = game.row_as_string(i) {
+			queue!(stdout, MoveTo(0, i as u16), Print(line))?;
+			i += 1;
+		}
+
+		queue!(stdout, MoveTo(0, (i + 1) as u16), Print("Press Esc to exit..."))?;
+		stdout.flush()?;
+		game.tick();
+
+
+		if poll(Duration::from_millis(500))? {
+			if let Event::Key(KeyEvent { code, .. }) = read()? {
+				match code {
+					KeyCode::Esc => {
+						break;
+					},
+					KeyCode::Tab => {
+						color += 1;
+						if color % 2 == 0{
+							execute!(stdout, SetForegroundColor(Color::Green))?;
+						}else{
+							execute!(stdout, SetForegroundColor(Color::Red))?;
+						}
+					}
+					_ => {}
+				}
+			}
+		}
+	}
+
+	execute!(stdout, ResetColor, Show, LeaveAlternateScreen)?;
+
+	Ok(())
+
 }
 /*
 fn main() -> Result<()> {
