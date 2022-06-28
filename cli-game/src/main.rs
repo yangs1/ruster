@@ -23,13 +23,16 @@ fn  main () -> Result<()> {
         EnterAlternateScreen,
         SetForegroundColor(Color::Magenta),
 		Hide
-
     ).unwrap();
 
 	let mut game = game::Universe::new(5, 5);
     game.set_cells(&[(2, 1), (2, 2), (2, 3)]);
 
-	let mut color = 0;
+	let mut color_map = [
+		Color::Reset, Color::Black,Color::DarkGrey,Color::Red,Color::DarkRed,Color::Green,
+		Color::DarkGreen,Color::Yellow,Color::DarkYellow,Color::Blue,Color::DarkBlue,Color::Magenta,
+		Color::DarkMagenta,Color::Cyan,Color::DarkCyan,Color::White,Color::Grey].to_vec();
+		
 	loop {
 		queue!(stdout, Clear(ClearType::All))?;
 		let mut i = 0;
@@ -50,12 +53,9 @@ fn  main () -> Result<()> {
 						break;
 					},
 					KeyCode::Tab => {
-						color += 1;
-						if color % 2 == 0{
-							execute!(stdout, SetForegroundColor(Color::Green))?;
-						}else{
-							execute!(stdout, SetForegroundColor(Color::Red))?;
-						}
+						let tmp_color = color_map.pop().unwrap();
+						execute!(stdout, SetForegroundColor(tmp_color))?;
+						color_map.insert(0, tmp_color);
 					}
 					_ => {}
 				}
@@ -68,6 +68,11 @@ fn  main () -> Result<()> {
 	Ok(())
 
 }
+
+
+
+
+
 /*
 fn main() -> Result<()> {
 
