@@ -1,6 +1,0 @@
-[2m2022-08-18T13:11:17.066791Z[0m [32m INFO[0m [2mtracelog[0m[2m:[0m [2msrc/main.rs[0m[2m:[0m we`ve got 3 team!
-[2m2022-08-18T13:11:17.066855Z[0m [32m INFO[0m [2mtracelog[0m[2m:[0m [2msrc/main.rs[0m[2m:[0m something happened
-[2m2022-08-18T13:11:17.066941Z[0m [32m INFO[0m [1mmy_great_span[0m[2m:[0m [2mtracelog[0m[2m:[0m [2msrc/main.rs[0m[2m:[0m i'm in the span!
-[2m2022-08-18T13:11:17.066976Z[0m [32m INFO[0m [2mtracelog[0m[2m:[0m [2msrc/main.rs[0m[2m:[0m i'm outside the span!
-[2m2022-08-18T13:11:17.067002Z[0m [32m INFO[0m [2mtracelog[0m[2m:[0m [2msrc/main.rs[0m[2m:[0m id: 2
-[2m2022-08-18T13:11:17.067021Z[0m [32m INFO[0m [1mmy_span[0m[2m:[0m [2mtracelog[0m[2m:[0m [2msrc/main.rs[0m[2m:[0m something happened inside my_span

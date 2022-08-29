@@ -4,13 +4,13 @@ use tracing_subscriber::{FmtSubscriber, fmt::MakeWriter};
 use tracing::{info, error, Level, span, event, info_span};
 
 fn main() {
-    let  buffer = File::create("foo.txt").unwrap();
+    let  buffer = File::create("foo.log").unwrap();
 
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::TRACE)
         .with_file(true)
         // .with_target(true)
-        .with_writer(Mutex::new(buffer))
+       // .with_writer(Mutex::new(buffer))
         .finish();
 
     tracing::subscriber::set_global_default(subscriber).expect("setting default error");
@@ -22,7 +22,6 @@ event!(Level::INFO, "something happened");
 
 
 let span = info_span!("my_great_span");
-
 {
     let _enter = span.enter();
 
@@ -47,3 +46,5 @@ event!(Level::INFO, "something happened inside my_span");
 
 
 }
+
+
