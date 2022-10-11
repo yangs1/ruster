@@ -59,7 +59,7 @@ fn parse_url(url: &str) -> Result<String> {
 
 
 #[allow(dead_code)]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 struct KvPair {
     k : String,
     v : String
@@ -99,6 +99,7 @@ async fn main() -> Result<()> {
         Commands::Get(ref args) => get(client,args).await?,
         Commands::Post(ref args) => post(client, args).await?
     };
+
 
     Ok(result)
 }
@@ -170,3 +171,32 @@ fn print_syntect(s: &str, ext: &str) {
         print!("{}", escaped);
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_url_works(){
+        assert!(parse_url("asd").is_err());
+        assert!(parse_url("http://abc.xyz").is_ok());
+    }
+
+    #[test]
+    fn parse_kv_pair_works(){
+        assert!(parse_body("body").is_err());
+
+        assert_eq!(
+            parse_body("body=123").unwrap(),
+            KvPair {
+                k : "body".into(),
+                v : "123".into()
+            }
+        )
+    }
+}
+
+
+// cargo run post -u=https://httpbin.org/post greeting=hla name=tyr
+// cargo run get https://httpbin.org/get 
