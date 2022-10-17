@@ -1,6 +1,9 @@
 use dashmap::{mapref::one::Ref, DashMap};
 
-use crate::{pb::abi::{Value, Kvpair}, error::KvError};
+use crate::{
+    error::KvError,
+    pb::abi::{Kvpair, Value},
+};
 
 use super::Storage;
 
@@ -38,10 +41,12 @@ impl Storage for MemTable {
         let table = self.get_or_create_table(table);
         Ok(table
             .iter()
-            .map(|v| Kvpair{ key: v.key().to_string(), value: Some(v.value().clone()) })
+            .map(|v| Kvpair {
+                key: v.key().to_string(),
+                value: Some(v.value().clone()),
+            })
             .collect())
     }
-
 }
 
 #[cfg(test)]
